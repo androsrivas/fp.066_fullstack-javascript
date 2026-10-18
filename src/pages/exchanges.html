@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Tándem · Intercambios</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="../css/styles.css" rel="stylesheet">
+</head>
+
+<body class="d-flex flex-column min-vh-100">
+
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary px-lg-5">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="index.html">Tándem</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#menu"
+                aria-controls="menu" aria-expanded="false" aria-label="Abrir menú">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+
+            <div class="collapse navbar-collapse" id="menu">
+                <ul class="navbar-nav me-auto">
+                    <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+                    <li class="nav-item"><a class="nav-link active fw-semibold" aria-current="page"
+                            href="exchanges.html">Intercambios</a></li>
+                    <li class="nav-item"><a class="nav-link" href="users.html">Usuarios</a></li>
+                </ul>
+                <div class="d-flex align-items-center gap-3">
+                    <span id="navCorreo" class="text-white fw-semibold"></span>
+                    <a href="login.html" class="btn btn-light btn-sm">Cerrar sesión</a>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <main class="container flex-grow-1 py-4 px-3 px-lg-5">
+        <div id="zonaAlerta"></div>
+
+        <h1 class="fw-semibold mb-1">Intercambios</h1>
+        <p class="text-secondary mb-4">Publica ofertas y peticiones de intercambio de idioma y consulta las existentes.
+        </p>
+
+        <section class="card border-0 shadow-sm rounded-4 mb-4">
+            <div class="card-body p-4">
+                <h2 class="h6 fw-semibold mb-3">Nuevo intercambio</h2>
+
+                <form id="formIntercambio" novalidate>
+                    <div class="mb-3">
+                        <label class="form-label fw-medium">Tipo</label>
+                        <div class="d-flex flex-column flex-sm-row gap-2">
+                            <input type="radio" class="btn-check" name="tipo" id="tipoOferta" value="oferta">
+                            <label class="tipo-opcion tipo-oferta flex-fill" for="tipoOferta">Oferta · ofrezco
+                                practicar</label>
+
+                            <input type="radio" class="btn-check" name="tipo" id="tipoPeticion" value="peticion">
+                            <label class="tipo-opcion tipo-peticion flex-fill" for="tipoPeticion">Petición · busco
+                                practicar</label>
+                        </div>
+                        <div id="errorTipo" class="text-danger small mt-1 d-none">Elige si es una oferta o una petición.
+                        </div>
+                    </div>
+
+                    <div class="row g-3 mb-3">
+                        <div class="col-md-4">
+                            <label for="titulo" class="form-label fw-medium">Título</label>
+                            <input type="text" class="form-control" id="titulo" maxlength="60"
+                                placeholder="Ej. Conversación en inglés">
+                            <div class="invalid-feedback">El título es obligatorio.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="idioma" class="form-label fw-medium">Idioma</label>
+                            <select class="form-select" id="idioma">
+                                <option value="" selected disabled>Elige un idioma</option>
+                            </select>
+                            <div class="invalid-feedback">Elige un idioma.</div>
+                        </div>
+                        <div class="col-md-4">
+                            <label for="nivel" class="form-label fw-medium">Nivel</label>
+                            <select class="form-select" id="nivel">
+                                <option value="" selected disabled>Elige un nivel</option>
+                            </select>
+                            <div class="invalid-feedback">Elige un nivel.</div>
+                        </div>
+                    </div>
+
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label fw-medium">Descripción</label>
+                        <textarea class="form-control" id="descripcion" rows="3" maxlength="200"
+                            placeholder="Cuenta brevemente qué ofreces o qué necesitas…"></textarea>
+                        <div class="form-text">Opcional · máximo 200 caracteres.</div>
+                    </div>
+
+                    <div class="d-flex flex-column flex-sm-row gap-2">
+                        <button type="submit" class="btn btn-primary fw-semibold px-4">＋ Publicar</button>
+                        <button type="reset" class="btn btn-outline-secondary">Limpiar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+
+        <section class="card border-0 shadow-sm rounded-4 overflow-hidden">
+            <div class="d-flex flex-wrap align-items-center gap-2 p-3 px-4">
+                <h2 class="h6 fw-semibold mb-0">Intercambios <span id="contador"
+                        class="badge rounded-pill text-bg-light ms-1">0</span></h2>
+                <div class="ms-md-auto d-flex gap-2" id="filtros">
+                    <button type="button" class="btn btn-sm rounded-pill btn-outline-secondary"
+                        data-filtro="todos">Todos</button>
+                    <button type="button" class="btn btn-sm rounded-pill btn-outline-secondary"
+                        data-filtro="oferta">Ofertas</button>
+                    <button type="button" class="btn btn-sm rounded-pill btn-outline-secondary"
+                        data-filtro="peticion">Peticiones</button>
+                </div>
+            </div>
+
+            <div id="listado">
+                <div class="d-none d-md-block">
+                    <table class="table tabla-intercambios mb-0">
+                        <thead>
+                            <tr>
+                                <th class="ps-4">Tipo</th>
+                                <th>Título</th>
+                                <th>Idioma</th>
+                                <th>Nivel</th>
+                                <th class="text-end pe-4">Acción</th>
+                            </tr>
+                        </thead>
+                        <tbody id="tbody"></tbody>
+                    </table>
+                </div>
+                <div id="tarjetas" class="d-md-none p-3 pt-0"></div>
+            </div>
+
+            <div id="vacio" class="text-center border-top py-5 px-3 d-none">
+                <div class="icono-vacio d-flex align-items-center justify-content-center mx-auto mb-3">⇄</div>
+                <strong class="d-block" id="vacioTitulo"></strong>
+                <span class="text-secondary" id="vacioTexto"></span>
+            </div>
+        </section>
+    </main>
+
+    <footer class="text-center py-4">Tándem · Proyecto FP066 · Producto 1</footer>
+
+    <div class="modal fade" id="modalBaja" tabindex="-1" aria-labelledby="modalBajaTitulo" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content rounded-4 border-0">
+                <div class="modal-body p-4">
+                    <h2 class="h5 fw-semibold" id="modalBajaTitulo"></h2>
+                    <p class="text-secondary mb-4">Se quitará de la lista de intercambios y dejará de aparecer en el
+                        dashboard. Esta acción no se puede deshacer.</p>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-outline-secondary"
+                            data-bs-dismiss="modal">Cancelar</button>
+                        <button type="button" class="btn btn-danger fw-semibold" id="confirmarBaja">Sí, dar de
+                            baja</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    <script type="module" src="../js/exchanges.js"></script>
+</body>
+
+</html>
