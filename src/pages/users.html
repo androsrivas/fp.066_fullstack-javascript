@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <!--
+    PROMPTS DE IA USADOS EN ESTA PÁGINA
+    1) IA: Claude | Prompt: "Hazme la pantalla de Usuarios con un formulario de alta (nombre, correo, contraseña, idioma nativo e idioma que aprende) y una tabla con los usuarios registrados, usando Bootstrap 5."
+    2) IA: Claude | Prompt: "Añade validación al formulario con checkValidity y las clases was-validated e invalid-feedback de Bootstrap, y que no deje repetir el correo."
+    3) IA: Claude | Prompt: "Explícame cómo mostrar una ventana de confirmación (modal de Bootstrap) antes de dar de baja a un usuario."
+    4) IA: Claude | Prompt: "Haz que la fila del usuario nuevo se resalte en verde con una animación suave y que se apague si la persona pide menos movimiento."
+  -->
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Tándem – Usuarios</title>
+  <link rel="stylesheet"
+        href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="stylesheet"
+        href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap">
+  <link rel="stylesheet" href="../css/styles.css">
+</head>
+<body>
+  <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+    <div class="container">
+      <a class="navbar-brand fw-semibold" href="index.html">Tándem</a>
+      <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+              data-bs-target="#menu" aria-controls="menu" aria-label="Abrir menú">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+      <div class="collapse navbar-collapse" id="menu">
+        <ul class="navbar-nav me-auto">
+          <li class="nav-item"><a class="nav-link" href="index.html">Dashboard</a></li>
+          <li class="nav-item"><a class="nav-link" href="exchanges.html">Intercambios</a></li>
+          <li class="nav-item"><a class="nav-link active" href="users.html">Usuarios</a></li>
+        </ul>
+        <span class="navbar-text me-3" id="usuario-nav"></span>
+        <a class="btn btn-light btn-sm" href="login.html">Iniciar sesión</a>
+      </div>
+    </div>
+  </nav>
+  <main class="container py-4">
+    <h1 class="h3 mb-1">Gestión de usuarios</h1>
+    <p class="text-muted">Da de alta personas nuevas y consulta quién está registrado.</p>
+    <div id="aviso-usuarios" role="status"></div>
+
+    <section class="card shadow-sm mb-4" aria-labelledby="t-nuevo">
+      <div class="card-body">
+        <h2 id="t-nuevo" class="h5 mb-3">Nuevo usuario</h2>
+        <form id="form-usuario" novalidate>
+          <div class="row g-3">
+            <div class="col-12 col-md-6">
+              <label for="nombre" class="form-label">Nombre completo</label>
+              <input type="text" class="form-control" id="nombre" name="nombre"
+                     placeholder="Ej. Marta Ferrer" required minlength="3">
+              <div class="invalid-feedback">Escribe el nombre (mínimo 3 letras).</div>
+            </div>
+            <div class="col-12 col-md-6">
+              <label for="correo" class="form-label">Correo electrónico</label>
+              <input type="email" class="form-control" id="correo" name="correo"
+                     placeholder="nombre@dominio.com" required>
+              <div class="invalid-feedback" id="error-correo">Escribe un correo válido.</div>
+            </div>
+            <div class="col-12 col-md-4">
+              <label for="clave" class="form-label">Contraseña</label>
+              <input type="password" class="form-control" id="clave" name="clave"
+                     placeholder="Mínimo 4 caracteres" required minlength="4">
+              <div class="invalid-feedback">La contraseña necesita al menos 4 caracteres.</div>
+            </div>
+            <div class="col-12 col-md-4">
+              <label for="nativo" class="form-label">Idioma nativo</label>
+              <select class="form-select" id="nativo" name="nativo" required>
+                <option value="">Elige un idioma</option><option>Español</option><option>Catalán</option><option>Inglés</option><option>Francés</option><option>Alemán</option><option>Italiano</option><option>Japonés</option>
+              </select>
+              <div class="invalid-feedback">Elige tu idioma nativo.</div>
+            </div>
+            <div class="col-12 col-md-4">
+              <label for="aprende" class="form-label">Idioma que aprende</label>
+              <select class="form-select" id="aprende" name="aprende" required>
+                <option value="">Elige un idioma</option><option>Español</option><option>Catalán</option><option>Inglés</option><option>Francés</option><option>Alemán</option><option>Italiano</option><option>Japonés</option>
+              </select>
+              <div class="invalid-feedback" id="error-aprende">Elige el idioma que quieres aprender.</div>
+            </div>
+          </div>
+          <button type="submit" class="btn btn-primary mt-3">Dar de alta</button>
+        </form>
+      </div>
+    </section>
+
+    <section aria-labelledby="t-lista">
+      <div class="d-flex align-items-center gap-2 mb-2">
+        <h2 id="t-lista" class="h5 mb-0">Usuarios registrados</h2>
+        <span class="badge text-bg-secondary" id="contador-usuarios">0</span>
+      </div>
+      <div id="sin-usuarios" class="alert alert-light border text-center d-none">
+        Todavía no hay usuarios. Da de alta el primero con el formulario de arriba.
+      </div>
+      <div class="table-responsive" id="contenedor-tabla">
+        <table class="table table-hover align-middle bg-white">
+          <caption class="visually-hidden">Lista de usuarios registrados</caption>
+          <thead>
+            <tr>
+              <th scope="col">Nombre</th>
+              <th scope="col">Correo</th>
+              <th scope="col">Nativo</th>
+              <th scope="col">Aprende</th>
+              <th scope="col" class="text-end">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-usuarios"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div class="modal fade" id="modal-baja" tabindex="-1" aria-labelledby="titulo-baja" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h2 class="modal-title h5" id="titulo-baja">Confirmar baja</h2>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
+        </div>
+        <div class="modal-body">
+          ¿Seguro que quieres dar de baja a <strong id="nombre-baja"></strong>?
+          Esta acción no se puede deshacer.
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger" id="confirmar-baja">Dar de baja</button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer class="text-center text-muted py-3 small">
+    Tándem · Proyecto FP066 · Producto 1
+  </footer>
+  <script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js">
+  </script>
+  <script type="module" src="../js/users.js"></script>
+</body>
+</html>
