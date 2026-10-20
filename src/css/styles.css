@@ -35,6 +35,9 @@ body {
 .btn { transition: transform 0.15s ease; }
 .btn:active { transform: scale(0.96); }
 
+/* Fila o tarjeta recién creada: entra con una animación suave */
+.fila-nueva { animation: aparecer 0.5s ease both; }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }

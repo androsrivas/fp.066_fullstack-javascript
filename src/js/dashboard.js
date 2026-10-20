@@ -1,5 +1,12 @@
 // js/dashboard.js
 // Pinta una tarjeta por cada intercambio del archivo datos.js
+/*
+  PROMPTS DE IA USADOS EN ESTE ARCHIVO
+  1) IA: Claude | Prompt: "Escribe el JS que recorra el array intercambios importado de datos.js y cree una tarjeta de Bootstrap por cada elemento con createElement."
+  2) IA: Claude | Prompt: "¿Cómo corto una descripción larga a 80 caracteres y añado puntos suspensivos?"
+  3) IA: Claude | Prompt: "Haz que el filtro de tipo repinte las tarjetas con Array.filter cuando cambie el desplegable."
+  4) IA: Claude | Prompt: "¿Por qué debo usar escaparHtml antes de meter texto en innerHTML?"
+*/
 import { intercambios } from "./datos.js";
 import { escaparHtml } from "./utils.js";
 // 1. Localizamos en la página los elementos con los que vamos a trabajar

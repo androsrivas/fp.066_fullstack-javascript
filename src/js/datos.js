@@ -9,6 +9,14 @@
 //    lista importada con "export const" no se puede reemplazar (sí modificar).
 // 3) Cada objeto tiene un "id" único. Para uno nuevo usad siguienteId(lista) de utils.js.
 
+/*
+  PROMPTS DE IA USADOS EN ESTE ARCHIVO
+  1) IA: Claude | Prompt: "¿Cómo organizo datos de ejemplo de usuarios e intercambios como arrays de objetos en un único archivo exportado como módulo ES?"
+  2) IA: Claude | Prompt: "¿Por qué no puedo reasignar una lista importada con export const, pero sí usar push y splice?"
+  3) IA: Claude | Prompt: "¿Qué campos debería tener un intercambio en una plataforma de tándem lingüístico?"
+  4) IA: Claude | Prompt: "¿Por qué un módulo ES funciona con Live Server y no abriendo el HTML con doble clic?"
+*/
+
 export const usuarios = [
   { id: 1, nombre: "Laura Puig", email: "laura@tandem.com", password: "1234",
     idiomaNativo: "Español", idiomaAprende: "Inglés" },
