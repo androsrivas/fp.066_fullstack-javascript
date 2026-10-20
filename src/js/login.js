@@ -1,5 +1,12 @@
 // js/login.js
 // Comprueba el correo y la contraseña con la lista de usuarios de datos.js
+/*
+  PROMPTS DE IA USADOS EN ESTE ARCHIVO
+  1) IA: Claude | Prompt: "¿Cómo valido un formulario con Bootstrap 5 y JS puro usando checkValidity?"
+  2) IA: Claude | Prompt: "Busca un usuario en un array por correo y contraseña con find."
+  3) IA: Claude | Prompt: "Explica event.preventDefault() en un evento submit."
+  4) IA: Claude | Prompt: "¿Cómo muestro el correo del usuario en la barra de navegación y un aviso de error si los datos son incorrectos?"
+*/
 import { usuarios } from "./datos.js";
 import { mostrarAviso } from "./utils.js";
 // 1. Localizamos los elementos de la página
