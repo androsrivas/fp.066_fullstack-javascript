@@ -9,6 +9,7 @@
 */
 import { intercambios } from "./datos.js";
 import { escaparHtml } from "./utils.js";
+import "./nav.js"; // muestra el correo de la persona logueada en la barra
 // 1. Localizamos en la página los elementos con los que vamos a trabajar
 const contenedor = document.getElementById("tarjetas");
 const filtro = document.getElementById("filtro-tipo");
