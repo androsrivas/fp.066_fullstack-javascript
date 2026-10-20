@@ -3,8 +3,8 @@
 <head>
   <!--
     PROMPTS DE IA USADOS EN ESTA PÁGINA
-    1) IA: Claude | Prompt: "Hazme la pantalla de Intercambios con un formulario para publicar una oferta o una petición y un listado de tarjetas con Bootstrap 5."
-    2) IA: Claude | Prompt: "Quiero filtrar las tarjetas por tipo, por idioma y con un buscador de texto que se actualice mientras escribo."
+    1) IA: Claude | Prompt: "Hazme la pantalla de Intercambios con un formulario para publicar una oferta o una petición y una tabla con todos los intercambios, usando Bootstrap 5."
+    2) IA: Claude | Prompt: "Quiero filtrar los intercambios por tipo, por idioma y con un buscador de texto que se actualice mientras escribo."
     3) IA: Claude | Prompt: "Explícame cómo validar el formulario con checkValidity y cómo rellenar un desplegable de autores a partir de la lista de usuarios de datos.js."
     4) IA: Claude | Prompt: "Añade una confirmación antes de borrar un intercambio y un mensaje cuando no haya resultados."
   -->
@@ -127,7 +127,23 @@
       <div id="sin-resultados" class="alert alert-light border text-center d-none">
         No hay intercambios con estos filtros.
       </div>
-      <div id="tarjetas" class="row g-3"></div>
+      <div class="table-responsive" id="contenedor-tabla">
+        <table class="table table-hover align-middle bg-white tabla-intercambios">
+          <caption class="visually-hidden">Lista de intercambios</caption>
+          <thead>
+            <tr>
+              <th scope="col">Tipo</th>
+              <th scope="col">Título</th>
+              <th scope="col">Idioma</th>
+              <th scope="col">Nivel</th>
+              <th scope="col">Modalidad</th>
+              <th scope="col">Publicado por</th>
+              <th scope="col" class="text-end">Acción</th>
+            </tr>
+          </thead>
+          <tbody id="tabla-intercambios"></tbody>
+        </table>
+      </div>
     </section>
   </main>
 
@@ -135,15 +151,15 @@
     <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
-          <h2 class="modal-title h5" id="titulo-borrar">Borrar intercambio</h2>
+          <h2 class="modal-title h5" id="titulo-borrar">Dar de baja un intercambio</h2>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Cerrar"></button>
         </div>
         <div class="modal-body">
-          ¿Seguro que quieres borrar «<strong id="titulo-borrado"></strong>»?
+          ¿Seguro que quieres dar de baja «<strong id="titulo-borrado"></strong>»?
         </div>
         <div class="modal-footer">
           <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="confirmar-borrar">Borrar</button>
+          <button type="button" class="btn btn-danger" id="confirmar-borrar">Dar de baja</button>
         </div>
       </div>
     </div>

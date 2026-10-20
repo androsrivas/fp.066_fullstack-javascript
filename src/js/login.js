@@ -9,10 +9,10 @@
 */
 import { usuarios } from "./datos.js";
 import { mostrarAviso } from "./utils.js";
+import { iniciarSesion, cerrarSesion } from "./nav.js";
 // 1. Localizamos los elementos de la página
 const formulario = document.getElementById("form-login");
 const aviso = document.getElementById("aviso-login");
-const usuarioNav = document.getElementById("usuario-nav");
 // 2. Cuando se pulsa "Entrar" (evento submit) ejecutamos esta función
 formulario.addEventListener("submit", (evento) => {
   // Evita que el navegador recargue la página al enviar el formulario
@@ -31,12 +31,12 @@ formulario.addEventListener("submit", (evento) => {
   );
   // 6. Si lo encontramos: éxito. Si no: error.
   if (usuario) {
-    usuarioNav.textContent = usuario.email; // el correo aparece en la barra de navegación
+    iniciarSesion(usuario.email); // el correo aparece en la barra de navegación (en todas las páginas)
     mostrarAviso(aviso, `¡Bienvenido/a, ${usuario.nombre}!`, "success");
     formulario.reset();
     formulario.classList.remove("was-validated");
   } else {
-    usuarioNav.textContent = "";
+    cerrarSesion();
     mostrarAviso(aviso, "Correo o contraseña incorrectos", "danger");
   }
 });
