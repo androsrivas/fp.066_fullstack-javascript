@@ -8,6 +8,7 @@
 // 4) IA: Claude | Prompt: "Usa escaparHtml al pintar los datos y resalta la fila del usuario nuevo con una clase de animación."
 import { usuarios } from "./datos.js";
 import { escaparHtml, mostrarAviso, siguienteId } from "./utils.js";
+import "./nav.js"; // muestra el correo de la persona logueada en la barra
 
 // 1. Localizamos los elementos de la página
 const formulario = document.getElementById("form-usuario");

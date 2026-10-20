@@ -1,18 +1,20 @@
 // js/exchanges.js
-// Pantalla de Intercambios: publicar, filtrar, buscar y borrar.
+// Pantalla de Intercambios: publicar, filtrar, buscar y borrar, con los datos en una tabla.
 //
 // PROMPTS DE IA USADOS EN ESTE ARCHIVO
-// 1) IA: Claude | Prompt: "Escribe el JS de Intercambios: pintar tarjetas desde el array intercambios de datos.js y publicar uno nuevo con push."
+// 1) IA: Claude | Prompt: "Escribe el JS de Intercambios: pintar una tabla desde el array intercambios de datos.js y publicar uno nuevo con push."
 // 2) IA: Claude | Prompt: "Haz un filtro por tipo, otro por idioma y un buscador de texto que se combinen entre sí con Array.filter."
-// 3) IA: Claude | Prompt: "Rellena el desplegable de autores recorriendo el array usuarios y muestra el nombre de quien publica en cada tarjeta."
+// 3) IA: Claude | Prompt: "Rellena el desplegable de autores recorriendo el array usuarios y muestra el nombre de quien publica en cada fila de la tabla."
 // 4) IA: Claude | Prompt: "Pide confirmación con un modal de Bootstrap antes de borrar con splice y avisa si no hay resultados."
 import { usuarios, intercambios } from "./datos.js";
 import { escaparHtml, mostrarAviso, siguienteId } from "./utils.js";
+import "./nav.js"; // muestra el correo de la persona logueada en la barra
 
 // 1. Localizamos los elementos de la página
 const formulario = document.getElementById("form-intercambio");
 const aviso = document.getElementById("aviso-intercambios");
-const contenedor = document.getElementById("tarjetas");
+const cuerpo = document.getElementById("tabla-intercambios");
+const contenedorTabla = document.getElementById("contenedor-tabla");
 const contador = document.getElementById("contador");
 const sinResultados = document.getElementById("sin-resultados");
 const filtroTipo = document.getElementById("filtro-tipo");
@@ -37,30 +39,22 @@ function nombreDe(email) {
   return usuario ? usuario.nombre : email;
 }
 
-// 4. Construye UNA tarjeta
-function crearTarjeta(i) {
+// 4. Construye UNA fila de la tabla
+function crearFila(i) {
   const esOferta = i.tipo === "oferta";
-  const columna = document.createElement("div");
-  columna.className = "col-12 col-md-6 col-lg-4";
-  columna.innerHTML = `
-    <div class="card tarjeta-intercambio h-100 ${esOferta ? "" : "peticion"}">
-      <div class="card-body d-flex flex-column">
-        <div class="d-flex justify-content-between align-items-start mb-2">
-          <span class="badge ${esOferta ? "text-bg-success" : "text-bg-warning"}">${esOferta ? "Oferta" : "Petición"}</span>
-          ${i.id === idNuevo ? '<span class="badge text-bg-primary">Nuevo</span>' : ""}
-        </div>
-        <h3 class="h6 card-title">${escaparHtml(i.titulo)}</h3>
-        <p class="card-text small text-muted mb-1">
-          ${escaparHtml(i.idioma)} · Nivel ${escaparHtml(i.nivel)} · ${escaparHtml(i.modalidad)}
-        </p>
-        <p class="card-text small">${escaparHtml(i.descripcion)}</p>
-        <div class="mt-auto d-flex justify-content-between align-items-center">
-          <span class="small text-muted">Por ${escaparHtml(nombreDe(i.autor))}</span>
-          <button type="button" class="btn btn-sm btn-outline-danger" data-borrar="${i.id}">Borrar</button>
-        </div>
-      </div>
-    </div>`;
-  return columna;
+  const fila = document.createElement("tr");
+  fila.dataset.id = i.id;
+  fila.className = (esOferta ? "fila-oferta" : "fila-peticion") + (i.id === idNuevo ? " fila-nueva table-success" : "");
+  fila.innerHTML = `
+    <td><span class="badge ${esOferta ? "text-bg-success" : "text-bg-warning"}">${esOferta ? "Oferta" : "Petición"}</span></td>
+    <td><strong>${escaparHtml(i.titulo)}</strong>${i.id === idNuevo ? ' <span class="badge text-bg-primary ms-1">Nuevo</span>' : ""}
+      <div class="small text-muted">${escaparHtml(i.descripcion)}</div></td>
+    <td>${escaparHtml(i.idioma)}</td>
+    <td>${escaparHtml(i.nivel)}</td>
+    <td>${escaparHtml(i.modalidad)}</td>
+    <td>${escaparHtml(nombreDe(i.autor))}</td>
+    <td class="text-end"><button type="button" class="btn btn-sm btn-outline-danger text-nowrap" data-borrar="${i.id}">Dar de baja</button></td>`;
+  return fila;
 }
 
 // 5. Aplica los tres filtros a la vez y pinta el resultado
@@ -73,9 +67,10 @@ function pintar() {
     (idioma === "todos" || i.idioma === idioma) &&
     (texto === "" || (i.titulo + " " + i.descripcion).toLowerCase().includes(texto))
   );
-  contenedor.innerHTML = "";
-  visibles.forEach((i) => contenedor.appendChild(crearTarjeta(i)));
+  cuerpo.innerHTML = "";
+  visibles.forEach((i) => cuerpo.appendChild(crearFila(i)));
   contador.textContent = `Mostrando ${visibles.length} de ${intercambios.length} intercambios`;
+  contenedorTabla.classList.toggle("d-none", visibles.length === 0);
   sinResultados.classList.toggle("d-none", visibles.length > 0);
 }
 
@@ -98,7 +93,7 @@ formulario.addEventListener("submit", (evento) => {
   };
   intercambios.push(nuevo);
   idNuevo = nuevo.id;
-  // Quitamos los filtros para que se vea la tarjeta recién publicada
+  // Quitamos los filtros para que se vea la fila recién publicada
   filtroTipo.value = "todos";
   filtroIdioma.value = "todos";
   buscador.value = "";
@@ -113,8 +108,8 @@ filtroTipo.addEventListener("change", pintar);
 filtroIdioma.addEventListener("change", pintar);
 buscador.addEventListener("input", pintar);
 
-// 8. Borrar: un solo listener para todos los botones (delegación de eventos)
-contenedor.addEventListener("click", (evento) => {
+// 8. Baja: un solo listener para todos los botones (delegación de eventos)
+cuerpo.addEventListener("click", (evento) => {
   const boton = evento.target.closest("[data-borrar]");
   if (!boton) return;
   idPendiente = Number(boton.dataset.borrar);
@@ -126,7 +121,7 @@ botonBorrar.addEventListener("click", () => {
   const posicion = intercambios.findIndex((i) => i.id === idPendiente);
   if (posicion !== -1) {
     intercambios.splice(posicion, 1);
-    mostrarAviso(aviso, "Intercambio borrado.", "warning");
+    mostrarAviso(aviso, "Intercambio dado de baja.", "warning");
   }
   idPendiente = null;
   modalBorrar.hide();

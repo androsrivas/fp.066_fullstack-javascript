@@ -38,6 +38,10 @@ body {
 /* Fila o tarjeta recién creada: entra con una animación suave */
 .fila-nueva { animation: aparecer 0.5s ease both; }
 
+/* Tabla de intercambios: barra de color a la izquierda (verde = oferta, naranja = petición) */
+.tabla-intercambios tr.fila-oferta td:first-child { border-left: 6px solid var(--color-oferta); }
+.tabla-intercambios tr.fila-peticion td:first-child { border-left: 6px solid var(--color-peticion); }
+
 @media (prefers-reduced-motion: reduce) {
   * { animation: none !important; transition: none !important; }
 }
