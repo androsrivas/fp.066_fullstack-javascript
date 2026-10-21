@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "Producto 1 FP066 - Plataforma de tándem lingüístico (frontend)",
   "scripts": {
-    "start": "npx live-server src --open=pages/index.html"
+    "start": "npx live-server src --no-browser"
   },
   "license": "ISC"
 }
