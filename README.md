@@ -14,6 +14,5 @@ Los módulos ES **no funcionan abriendo el HTML con doble clic**; hace falta un 
 
 ## Estructura
 - `src/pages/` páginas HTML · `src/css/` estilos · `src/js/` scripts (`datos.js` = datos comunes)
-- `docs/` memoria y mapa conceptual
 
 Los datos viven en arrays en memoria: no hay persistencia (se pierden al recargar).
