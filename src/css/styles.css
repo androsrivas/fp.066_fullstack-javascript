@@ -1,0 +1,47 @@
+/* css/styles.css */
+:root {
+  --color-oferta: #1e8449;
+  --color-peticion: #d9822b;
+  --radio: 14px;
+}
+body {
+  font-family: "Poppins", system-ui, sans-serif;
+  background: #f5f7fb;
+}
+.tarjeta-intercambio {
+  border: 0;
+  border-left: 6px solid var(--color-oferta);
+  border-radius: var(--radio);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: transform 0.25s ease, box-shadow 0.25s ease;
+  animation: aparecer 0.5s ease both;
+}
+.tarjeta-intercambio.peticion {
+  border-left-color: var(--color-peticion);
+}
+.tarjeta-intercambio:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 10px 22px rgba(0, 0, 0, 0.15);
+}
+@keyframes aparecer {
+  from { opacity: 0; transform: translateY(14px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+/* El correo del usuario en la barra azul: blanco y en negrita para que se lea bien */
+#usuario-nav {
+  color: #ffffff;
+  font-weight: 600;
+}
+.btn { transition: transform 0.15s ease; }
+.btn:active { transform: scale(0.96); }
+
+/* Fila o tarjeta recién creada: entra con una animación suave */
+.fila-nueva { animation: aparecer 0.5s ease both; }
+
+/* Tabla de intercambios: barra de color a la izquierda (verde = oferta, naranja = petición) */
+.tabla-intercambios tr.fila-oferta td:first-child { border-left: 6px solid var(--color-oferta); }
+.tabla-intercambios tr.fila-peticion td:first-child { border-left: 6px solid var(--color-peticion); }
+
+@media (prefers-reduced-motion: reduce) {
+  * { animation: none !important; transition: none !important; }
+}
