@@ -15,3 +15,6 @@ npm-debug.log*
 # Salida de build o copias
 dist/
 *.zip
+
+#Documentación (no se sube al repo)
+docs/
